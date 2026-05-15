@@ -1,5 +1,8 @@
 import express, { type Application, type Request, type Response } from "express"
+
 import  { Pool } from "pg"
+import dotenv from "dotenv"
+dotenv.config()
 const app :Application = express()
 const port = 3000
 app.use(express.json()) //middleware for json data
@@ -14,7 +17,7 @@ app.get('/', (req : Request, res:Response) => {
 })
 
   const pool=new Pool({
-    connectionString:"postgresql://neondb_owner:npg_hnOyUv9a4REq@ep-long-firefly-aqzfrzdf-pooler.c-8.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+    connectionString:process.env.DATABASE_URL
   })
 
 
@@ -24,7 +27,8 @@ app.get('/', (req : Request, res:Response) => {
                      CREATE TABLE IF NOT EXISTS userDB(
                        id SERIAL PRIMARY KEY,
                        name VARCHAR(30) NOT NULL,
-                       email VARCHAR(30) NOT NULL,
+                       email VARCHAR(30) UNIQUE NOT NULL,
+                       password VARCHAR(20) NOT NULL,
                        age INT,
                        created_at TIMESTAMP DEFAULT NOW(),
                        updated_at TIMESTAMP DEFAULT NOW()
@@ -40,14 +44,34 @@ app.get('/', (req : Request, res:Response) => {
 
 
 app.post('/',async(req:Request,res:Response)=>{
-    const {name,email,password} =req.body;
+    const {name,email,password,age} =req.body;
+
+          
+       try{
+                       const result= await   pool.query(`
+                    INSERT INTO userDB(name,email,password,age) VALUES($1,$2,$3,$4)  
+                    RETURNING *        
+              `,[name,email,password,age])        //* here asterisk means all value you use specific key for value like RETURNING name,email
+         console.log(result);
     // res.send(body)
     res.status(201).json({
         message:"Created post",
          data:{
-            name,email
+           data:result.rows[0]
          }
     })
+       }
+        catch(error:any){
+                 res.status(500).json({
+        message:"Internal error",
+         data:{
+           error:error.message
+         }
+    })
+        }
+
+
+        
 })
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
