@@ -165,7 +165,36 @@ app.post('/users',async(req:Request,res:Response)=>{
                       })
                }
         })
+       
 
+        app.delete('/users/:id',async(req:Request,res:Response)=>{
+                    const {id}=req.params;
+                    const result= await pool.query(`
+                        DELETE FROM userDB
+                        WHERE id=$1  
+                      `,[id])
+                    
+                        if(result.rowCount===0){
+                               res.status(404).json({
+                                     message:"Data does not exist,failed to delete",
+                                     success:false,
+                                     data:{}
+                               })
+                        }
+
+                      try{
+                            res.status(200).json({
+                               message:'Delete successfully',
+                               success:true,
+                               data:result.rows[0]
+                            })  
+                      }
+                      catch(error:any){
+                                 res.status(404).json({
+                                     error:error.message
+                                 })
+                      }
+        })
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
