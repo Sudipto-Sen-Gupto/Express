@@ -126,6 +126,43 @@ app.post('/users',async(req:Request,res:Response)=>{
                                     })
                           }
         })
+
+        app.put('/users/:id',async(req:Request,res:Response)=>{
+                const {id}=req.params;
+                const {name,password,age}=req.body;
+                const result=await pool.query(`
+                        UPDATE userDB  
+                        SET name=$1,password=$2,age=$3
+                        WHERE id=$4 
+                        RETURNING *
+                  `,[name,password,age,id])
+
+                  if(result.rows.length===0){
+                          res.status(404).json({
+                             message:"Data does not exist, failed to update",
+                             success:false,
+                             data:{}
+                          })
+                  }
+
+                  // console.log(id);
+                  // console.log(result);
+
+               try{
+                     res.status(200).json({
+                      message:"Data updated successfully",
+                      success:true,
+                      data:result.rows[0]
+                     })
+               }
+               catch(error:any){
+                      res.status(500).json({
+                        message:error.message
+                      })
+               }
+        })
+
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
