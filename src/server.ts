@@ -130,10 +130,14 @@ app.post('/users',async(req:Request,res:Response)=>{
         app.put('/users/:id',async(req:Request,res:Response)=>{
                 const {id}=req.params;
                 const {name,password,age}=req.body;
+
+                //COALESCE is used for prevent null value which section we don't update
                 const result=await pool.query(`
                         UPDATE userDB  
-                        SET name=$1,password=$2,age=$3
-                        WHERE id=$4 
+                        SET name=COALESCE($1,name) ,    
+                        password=COALESCE($2,password),
+                        age=COALESCE($3,age)
+                        WHERE id=COALESCE($4,id) 
                         RETURNING *
                   `,[name,password,age,id])
 
