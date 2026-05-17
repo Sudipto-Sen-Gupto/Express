@@ -1,17 +1,15 @@
 import type { Request, Response } from "express";
 import { pool } from "../../dbNeon";
+import { postService } from "./user.service";
 
  const userPost=async(req:Request,res:Response)=>{
     const {name,email,password,age} =req.body;
 
           
        try{
-                       const result= await   pool.query(`
-                    INSERT INTO userDB(name,email,password,age) VALUES($1,$2,$3,$4)  
-                    RETURNING *        
-              `,[name,email,password,age])        //* here asterisk means all value you use specific key for value like RETURNING name,email
-         console.log(result);
-    // res.send(body)
+           const result=await postService(req.body)
+
+                       // res.send(body)
     res.status(201).json({
         message:"Created post",
          data:{
