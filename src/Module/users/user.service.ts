@@ -15,4 +15,54 @@ import type { user } from "../userType";
     
   }
 
+  const userGetService=async()=>{
+      const result= await pool.query(`
+                          SELECT * FROM userDB
+                      `)
+                      return result
+  }
+
+  const userSingleGetService=async(id:string)=>{
+              
+                        console.log(id);
+                          
+                           
+
+                        const result= await pool.query(`
+                              SELECT * FROM  userDB WHERE id=$1
+                          `,[id])
+                          
+                 return result                  
+  }
+
+ const userUpdateService=async(payload:user,id:string)=>{
+                 
+                  const {name,password,age}=payload
+
+
+           const result=await pool.query(`
+                        UPDATE userDB  
+                        SET name=COALESCE($1,name) ,    
+                        password=COALESCE($2,password),
+                        age=COALESCE($3,age)
+                        WHERE id=COALESCE($4,id) 
+                        RETURNING *
+                  `,[name,password,age,id])
+
+                  return result
+ }
+  
+ const userDeleteService=async(id:string)=>{
+           const result= await pool.query(`
+                        DELETE FROM userDB
+                        WHERE id=$1  
+                      `,[id])
+
+                      return result
+ }
+
   export const postService=userPostService
+  export const getService=userGetService
+  export const singleData=userSingleGetService
+  export const updateService=userUpdateService
+  export const deleteService=userDeleteService
