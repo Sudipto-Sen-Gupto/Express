@@ -1,15 +1,22 @@
 import { pool } from "../../dbNeon";
 import type { user } from "../userType";
-
+import bcrypt, { genSalt } from "bcrypt";
  
   const userPostService=async(payload:user)=>{
         const {name,email,password,age}=payload
+         
+      
+
+         const hashPassword=await bcrypt.hash(password,10);
+         console.log(hashPassword);
 
        const result= await   pool.query(`
                     INSERT INTO userDB(name,email,password,age) VALUES($1,$2,$3,$4)  
                     RETURNING *        
-              `,[name,email,password,age])        //* here asterisk means all value you use specific key for value like RETURNING name,email
-         console.log(result);
+              `,[name,email,hashPassword,age])        //* here asterisk means all value you use specific key for value like RETURNING name,email
+      //    console.log(result);
+            delete result.rows[0].password
+
          return result;
     // res.send(body)
     

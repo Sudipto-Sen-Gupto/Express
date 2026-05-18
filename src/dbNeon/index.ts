@@ -15,7 +15,7 @@ dotenv.config()
                        id SERIAL PRIMARY KEY,
                        name VARCHAR(30) NOT NULL,
                        email VARCHAR(30) UNIQUE NOT NULL,
-                       password VARCHAR(20) NOT NULL,
+                       password TEXT NOT NULL,
                        age INT,
                        created_at TIMESTAMP DEFAULT NOW(),
                        updated_at TIMESTAMP DEFAULT NOW()
