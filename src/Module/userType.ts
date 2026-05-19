@@ -6,3 +6,7 @@ export interface user{
       age:number;
  }
 
+export interface IAuth{
+         email:string;
+         password:string;
+}

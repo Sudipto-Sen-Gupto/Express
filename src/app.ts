@@ -5,6 +5,7 @@ import express, {   type Application, type Request, type Response } from "expres
 import {  initDB, pool } from "./dbNeon"
 import { userRouter } from "./Module/users/user.module"
 import { profileRouter } from "./Module/profile/profile.module"
+import { authRouter } from "./Module/auth/auth.module"
 // dotenv.config()
  const app :Application = express()
 // const port = 3000
@@ -33,6 +34,8 @@ app.use('/user',userRouter)
 app.use('/user',userRouter)
 
 app.use('/profile',profileRouter)
+
+app.use('/login',authRouter)
 // app.post('/users',async(req:Request,res:Response)=>{
 //     const {name,email,password,age} =req.body;
 
