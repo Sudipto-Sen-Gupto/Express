@@ -1,5 +1,5 @@
 import { pool } from "../../dbNeon"
-import type { IAuth } from "../userType"
+import { UserRole, type IAuth } from "../userType"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
      const userLoginService=async(payload:IAuth)=>{
@@ -33,11 +33,13 @@ import jwt from "jsonwebtoken"
                            id:user.id,
                            email:user.email,
                            name:user.name,
-                           age:user.age
+                           age:user.age,
+                           role:user.role
                   }  
-
+                        
                  const accessToken=await jwt.sign(jsonPayload,process.env.SECTRET_KEY as string,{expiresIn:"10d"})
 
+                       
                  return accessToken
      }
 

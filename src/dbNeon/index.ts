@@ -17,6 +17,7 @@ dotenv.config()
                        email VARCHAR(30) UNIQUE NOT NULL,
                        password TEXT NOT NULL,
                        age INT,
+                       role VARCHAR(20) DEFAULT 'user',
                        created_at TIMESTAMP DEFAULT NOW(),
                        updated_at TIMESTAMP DEFAULT NOW()
                      )

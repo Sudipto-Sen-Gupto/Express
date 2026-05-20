@@ -30,7 +30,7 @@ app.get('/', (req : Request, res:Response) => {
   
 //    initDB()
 
-app.use('/users',auth(),userRouter) //like middleware
+app.use('/users',userRouter) //like middleware
 
 app.use('/user',userRouter)
 

@@ -1,9 +1,12 @@
 import type { NextFunction, Request, Response } from "express"
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import { pool } from "../dbNeon";
- const auth=()=>{
+import { UserRole, type Role } from "../Module/userType";
+ const auth=(...roles:Role[])=>{
      return async(req:Request,res:Response,next:NextFunction)=>{
              try{
+
+               console.log(roles);
                         console.log(req.headers);
 
               const token = req.headers.authorization;
@@ -39,12 +42,25 @@ import { pool } from "../dbNeon";
                
                 req.user=decodedToken
 
-                console.log(req.user);
+               //  console.log(req.user);
+
+                console.log("role:",user.role);
+                       
+                       const userRole=user.role;
+
+                       if(userRole.length && !roles.includes(userRole)){
+                              res.status(404).json({
+                           message:"not found"
+                        })
+                       }
+
 
               next()
              }
              catch(error){
-                        throw new Error("Not found ")
+                        res.status(404).json({
+                           message:"not found"
+                        })
                         // next(error)
              }
      }
