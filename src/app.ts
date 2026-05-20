@@ -7,6 +7,8 @@ import { userRouter } from "./Module/users/user.module"
 import { profileRouter } from "./Module/profile/profile.module"
 import { authRouter } from "./Module/auth/auth.module"
 import fs from "fs"
+import logger from "./middleware/logger"
+import auth from "./middleware/auth"
 // dotenv.config()
  const app :Application = express()
 // const port = 3000
@@ -15,15 +17,7 @@ app.use(express.urlencoded({extended:true}))
 app.use(express.text())
 
 //customized middleware
-app.use((req, res, next) => {
-  console.log('Time:',req.method,req.url, Date.now());
-  console.log(`Time->${Date.now()},Method->${req.method},URL->${req.url}`);
-  const logger=`Time->${Date.now()},Method->${req.method},URL->${req.url}\n`
-  fs.appendFile('logger.txt',logger,(error)=>{
-         console.log(error);
-  })
-  next();
-});
+app.use(logger);
 
 app.get('/', (req : Request, res:Response) => {
   res.status(200).json({
@@ -36,7 +30,7 @@ app.get('/', (req : Request, res:Response) => {
   
 //    initDB()
 
-app.use('/users',userRouter) //like middleware
+app.use('/users',auth(),userRouter) //like middleware
 
 app.use('/user',userRouter)
 
