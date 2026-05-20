@@ -7,7 +7,7 @@ import type { NextFunction, Request, Response } from "express";
     console.log(`Time->${Date.now()},Method->${req.method},URL->${req.url}`);
     const logger=`Time->${Date.now()},Method->${req.method},URL->${req.url}\n`
     fs.appendFile('logger.txt',logger,(error)=>{
-           console.log(error);
+          //  console.log(error);
     })
     next();
   }

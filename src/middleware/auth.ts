@@ -3,7 +3,8 @@ import jwt, { type JwtPayload } from "jsonwebtoken"
 import { pool } from "../dbNeon";
  const auth=()=>{
      return async(req:Request,res:Response,next:NextFunction)=>{
-              console.log(req.headers);
+             try{
+                        console.log(req.headers);
 
               const token = req.headers.authorization;
 
@@ -30,13 +31,22 @@ import { pool } from "../dbNeon";
                      })
                 }
 
-                if(user.age<28){
-                     res.status(403).json({
-                          message:"Forbidden for this user"
-                     })
-                }
+                // if(user.age<28){
+                //      res.status(403).json({
+                //           message:"Forbidden for this user"
+                //      })
+                // }
+               
+                req.user=decodedToken
+
+                console.log(req.user);
 
               next()
+             }
+             catch(error){
+                        throw new Error("Not found ")
+                        // next(error)
+             }
      }
  }
 
