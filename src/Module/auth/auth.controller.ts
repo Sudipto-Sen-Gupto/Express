@@ -8,6 +8,14 @@ import { authService } from "./auth.service"
 
            try{
                       const result = await authService.userLoginService(req.body)
+                      
+                       const {refreshToken}=result;
+
+                       res.cookie('refreshToken',refreshToken,{
+                             secure:false,
+                             httpOnly:true,
+                             sameSite:'lax'
+                       })
 
                       res.status(200).json({
                           success:true,

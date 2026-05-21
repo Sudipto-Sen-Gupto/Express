@@ -39,8 +39,11 @@ import jwt from "jsonwebtoken"
                         
                  const accessToken=await jwt.sign(jsonPayload,process.env.SECTRET_KEY as string,{expiresIn:"10d"})
 
-                       
-                 return accessToken
+                  const refreshToken=await jwt.sign(
+                    jsonPayload,process.env.SECRET_Refresh_Key as string,{expiresIn:'20d'}    
+                  ) 
+                 
+                 return {accessToken,refreshToken}
      }
 
      
