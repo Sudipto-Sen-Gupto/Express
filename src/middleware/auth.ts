@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from "express"
 import jwt, { type JwtPayload } from "jsonwebtoken"
 import { pool } from "../dbNeon";
 import { UserRole, type Role } from "../Module/userType";
+
  const auth=(...roles:Role[])=>{
      return async(req:Request,res:Response,next:NextFunction)=>{
              try{
@@ -58,10 +59,10 @@ import { UserRole, type Role } from "../Module/userType";
               next()
              }
              catch(error){
-                        res.status(404).json({
-                           message:"not found"
-                        })
-                        // next(error)
+                        // res.status(404).json({
+                        //    message:"not found"
+                        // })
+                        next(error)
              }
      }
  }

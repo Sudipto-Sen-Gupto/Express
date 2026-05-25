@@ -10,6 +10,8 @@ import fs from "fs"
 import logger from "./middleware/logger"
 import auth from "./middleware/auth"
 import CookieParser from "cookie-parser"
+import cors from "cors"
+import Error from "./middleware/GlobalErrorHandler"
 // dotenv.config()
  const app :Application = express()
 // const port = 3000
@@ -32,6 +34,11 @@ app.get('/', (req : Request, res:Response) => {
   
 //    initDB()
 
+const  corsOptions = {
+  origin: 'http://localhost:5173/',
+  
+}
+app.use(cors(corsOptions))
 app.use('/users',userRouter) //like middleware
 
 app.use('/user',userRouter)
@@ -43,6 +50,10 @@ app.use('/user',userRouter)
 app.use('/profile',profileRouter)
 
 app.use('/auth',authRouter)
+
+ // global error handling at end
+
+ app.use(Error)
 // app.post('/users',async(req:Request,res:Response)=>{
 //     const {name,email,password,age} =req.body;
 
