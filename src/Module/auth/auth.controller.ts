@@ -11,6 +11,8 @@ import { authService } from "./auth.service"
                       
                        const {refreshToken}=result;
 
+                       console.log(refreshToken);
+
                        res.cookie('refreshToken',refreshToken,{
                              secure:false,
                              httpOnly:true,
@@ -19,7 +21,7 @@ import { authService } from "./auth.service"
 
                       res.status(200).json({
                           success:true,
-                          message:"Create jwt token",
+                          message:"Create Access token",
                           data:{result}
                       })
            }
@@ -31,8 +33,12 @@ import { authService } from "./auth.service"
                 })
 
            }
-  }
+  } 
+
+     const refreshToken=(req:Request,res:Response)=>{
+                     console.log(req.cookies);
+     }
 
   export const authentication={
-          userLogin
+          userLogin ,refreshToken
   }

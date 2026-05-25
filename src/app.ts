@@ -9,9 +9,11 @@ import { authRouter } from "./Module/auth/auth.module"
 import fs from "fs"
 import logger from "./middleware/logger"
 import auth from "./middleware/auth"
+import CookieParser from "cookie-parser"
 // dotenv.config()
  const app :Application = express()
 // const port = 3000
+app.use(CookieParser())
 app.use(express.json()) //middleware for json data
 app.use(express.urlencoded({extended:true}))
 app.use(express.text())
@@ -40,7 +42,7 @@ app.use('/user',userRouter)
 
 app.use('/profile',profileRouter)
 
-app.use('/login',authRouter)
+app.use('/auth',authRouter)
 // app.post('/users',async(req:Request,res:Response)=>{
 //     const {name,email,password,age} =req.body;
 

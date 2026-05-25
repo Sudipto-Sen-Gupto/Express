@@ -4,6 +4,7 @@ import { authentication } from "./auth.controller";
 
   const router=Router()
 
-   router.post('/',authentication.userLogin)
+   router.post('/login',authentication.userLogin);
+   router.post('/refreshToken',authentication.refreshToken)
 
  export const authRouter=router
